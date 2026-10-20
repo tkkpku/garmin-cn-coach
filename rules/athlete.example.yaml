@@ -1,0 +1,75 @@
+# athlete.example.yaml
+# 复制成 rules/athlete.yaml 后填写。已 gitignore，不会提交。
+# 不知道的写 null，不要编。null 的关键项会让 AI 拒绝安排强度课。
+
+athlete:
+  name: null
+  age: null                  # 影响佳明"健身年龄"是否可用（需 20 岁以上）
+  sex: null                  # M / F
+  weight_kg: null
+  device: null               # 例 "Forerunner 265"；没有手表留 null
+
+physiology:
+  hr_max: null               # 可选实测方式：5 公里全力或坡道测试；或看 hr_zones 的 maxHeartRateUsed
+  hr_max_source: null        # garmin / lab / field_test / estimate
+  resting_hr_baseline: null  # 近四周最低七日均值，红线判据要用
+  lactate_threshold:         # 手表测过才填
+    hr: null
+    pace_per_km: null        # 例 "4:21"
+    date: null
+  hr_zones:                  # 以设备原文为准
+    z1: null                 # 例 [105, 124]
+    z2: null
+    z3: null
+    z4: null
+    z5: null
+
+# 训练时看配速比看心率更可执行。区间写 "5:50-6:30" 或 "<=4:15"
+pace_prescription:
+  z1: null                   # 恢复
+  z2: null                   # 有氧底
+  z3: null                   # 中长稳态
+  z4: null                   # 阈值
+  z5: null                   # 间歇
+
+# 安全边界，必须自己定
+constraints:
+  weekly_volume_target_km: null
+  single_run_max_km: null
+  single_run_share_of_week: 0.30     # 单次不超过周跑量的比例
+  long_run_threshold_km: 10
+  long_runs_per_week_max: 2
+  max_quality_sessions_per_week: 2
+  quality_never_back_to_back: true
+  rest_days_per_week_min: 1
+  no_run_weekdays: []                # 例 [thursday]
+  fixed_commitments: []              # 例 ["周一晚有课"]
+  gym_access: false                  # 没健身房则力量只用自身体重与弹力带
+equipment: []                        # 例 [foam_roller, band_10kg]
+
+# 触发即降档或停练，不必商量
+redlines:
+  sleep_hours_min: 6
+  rhr_delta_bpm: 8                   # 静息心率高于基线该值且连续两天
+  hrv_status_bad: [UNBALANCED, LOW]
+  subjective: [sharp_pain, chest_tightness, dizziness]
+
+preferences:
+  pace_in_parens_not_hr: true        # 处方里写配速不写心率
+  ask_only: [rpe, pain, leg_feel]    # 每次只问这几项主观
+  plan_md_content: training_only     # md 只放训练内容
+  low_intensity_needs_permission_line: true
+
+paths:
+  log: null                # 训练日志 md 的路径
+  rules: rules/training-rules.md
+  plans_dir: plans         # 课表输出目录
+  report: null             # 周报输出路径；null 用脚本默认
+
+notify:
+  channel: none            # none / file / stdout / qq
+  qq:                      # 仅 channel 为 qq 时使用，凭据只写路径
+    napcat_ws: "ws://127.0.0.1:3001"
+    sender_account: null
+    recipient: null
+    token_file: null
